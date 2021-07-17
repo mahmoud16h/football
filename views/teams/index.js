@@ -1,7 +1,8 @@
 import {Text, ScrollView, Button, Image, View} from 'react-native';
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import CreateTeam from '../../components/createTeam';
+import CreateTeam from './screens/createTeam';
+import TeamView from './screens/teamView';
 import {LinearGradient} from 'expo-linear-gradient';
 import Card from '../../components/card';
 const Stack = createStackNavigator();
@@ -56,20 +57,28 @@ const TransitionScreen = {
 };
 
 const CardOptions = {
+  headerStyle: {
+    backgroundColor: 'transparent',
+  },
+  headerTintColor: '#fff',
+    headerTitleStyle: {
+    fontWeight: 'bold',
+  },
   ...TransitionScreen
 };
 
 const MyStack = () => {
   return (
     <Stack.Navigator screenOptions={CardOptions}>
-      <Stack.Screen name="Home" options={{headerShown: false}} component={Home} />
+      <Stack.Screen name="Teams" options={{headerShown: false}} component={Teams} />
       <Stack.Screen name="Create team" component={CreateTeam}/>
+      <Stack.Screen name="My team" component={TeamView}/>
       <Stack.Screen name="Join team" >{() => <View><Text>Join</Text></View>}</Stack.Screen>
     </Stack.Navigator>
   );
 }
 
-const Home = ({ navigation }) => {
+const Teams = ({ navigation }) => {
   return (
     <ScrollView style={{ flex: 1 }}>
       <View style={{ flex: 1, backgroundColor: 'transparent', justifyContent: 'space-evenly', display: 'flex', flexDirection: 'row', width: '100%', paddingTop: 20 }}>

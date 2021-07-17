@@ -1,17 +1,15 @@
-import {Text, View, ScrollView} from 'react-native';
+import {Text, View, ScrollView, Image} from 'react-native';
 import React, {useState} from 'react';
 import Input from '../input';
-import DropDownPicker from 'react-native-dropdown-picker';
 import {Ionicons} from '@expo/vector-icons';
+import theme from '../../views/theme';
+import addOne from '../../assets/addOne.png';
+import Card from '../card';
 
-const CreateTeam = () => {
-  const [teamName, setTeamName] = useState('')
-  const [open, setOpen] = useState(false);
-  const [city, setCity] = useState('')
+const AddPlayers = () => {
   const [playerName, setPlayerName] = useState('')
   const [playerNumber, setPlayerNumber] = useState('')
   const [players, setPlayers] = useState([])
-  const items = cities.map(city => ({ label: city, value: city}))
 
   const addPLayer = () => {
     const playerNumberExists = players.find(player => player.number === playerNumber)
@@ -20,6 +18,8 @@ const CreateTeam = () => {
       // check on backend if the players number already exists and then replace the name
       // given here with the name the player has actually registered with
       setPlayers([...players, { name: playerName, number: playerNumber }])
+      setPlayerName('')
+      setPlayerNumber('')
     }
   }
 
@@ -29,84 +29,40 @@ const CreateTeam = () => {
   }
 
   return (
-    <ScrollView keyboardShouldPersistTaps='handled' contentContainerStyle={{ flex: 1, alignItems: 'center' }}>
-      <Text>Create Team!</Text>
-      <Input value={teamName} onChangeText={setTeamName} placeholder="Team name"/>
-      <DropDownPicker
-        listMode="MODAL"
-        containerStyle={{ width: 200, margin: 6, backgroundColor: 'whitesmoke'  }}
-        style={{ backgroundColor: 'whitesmoke' }}
-        open={open}
-        value={city}
-        items={items}
-        setOpen={setOpen}
-        setValue={setCity}
-        searchable={true}
-        searchPlaceholder="Search..."
-      />
-      <Text>Add players</Text>
+    <View  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 30 }}>
       <Input value={playerName} onChangeText={setPlayerName} placeholder="Player name"/>
       <Input keyboardType="numeric" value={playerNumber} onChangeText={setPlayerNumber} placeholder="Player phone number"/>
-      <Ionicons name="add-circle-outline" size={24} color="black" onPress={addPLayer} />
-      {players.map(player =>
-        <View style={{ display: 'flex', flexDirection: 'row', width: '70%', justifyContent: 'space-between', alignItems: 'center', borderStyle: 'dashed', borderWidth: 1, borderColor: 'black', padding: 4, margin: 4}}>
-          <Text>{player.name}</Text>
-          <Text>{player.number}</Text>
-          <Ionicons name="close-circle-outline" size={24} color="black" onPress={() => removePlayer(player.number)} />
+      <Card width={50} height={50} onPress={addPLayer}>
+        <View style={{ justifyContent: 'center', alignItems: 'center', display: 'flex', width: '100%'}}>
+          <Image style={{ width: 20, height: 22}} source={addOne} />
+          <Text style={{ fontSize: 8, paddingTop: 2}}>Add player</Text>
+        </View>
+      </Card>
+      <View style={{ width: 330, height: 1, borderColor: theme.inactiveGrey, borderStyle: 'solid', borderWidth: 1, marginLeft: 6, marginTop: 20}}/>
+      <Text style={{ color: theme.activeWhite, fontSize: 20, marginLeft: 8, marginTop: 20, marginBottom: 20, fontWeight: 'bold'}}>Players</Text>
+      {!players.length && <Text style={{ color: theme.activeWhite, fontSize: 16, marginLeft: 8, fontWeight: 'bold'}}>You have no players in your team</Text>}
+      {players.map(({ name, number }) =>
+        <View key={number} style={{
+          display: 'flex',
+          backgroundColor: theme.activeWhite,
+          flexDirection: 'row',
+          width: 300,
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          borderStyle: 'dashed',
+          borderWidth: 1,
+          borderRadius: 6,
+          borderColor: theme.activeWhite,
+          padding: 4,
+          margin: 4
+        }}>
+          <Text style={{ fontSize: 16, marginLeft: 8, fontWeight: 'bold'}}>{name}</Text>
+          <Text style={{ fontSize: 16, marginLeft: 8, fontWeight: 'bold'}}>{number}</Text>
+          <Ionicons name="trash-outline" size={20} onPress={() => removePlayer(number)} />
         </View>
       )}
-    </ScrollView>
+    </View>
   );
 }
 
-export default CreateTeam
-
-const cities = [
-  'Bedfordshire',
-  'Berkshire',
-  'Bristol',
-  'Buckinghamshire',
-  'Cambridgeshire',
-  'Cheshire',
-  'City of London',
-  'Cornwall',
-  'Cumbria',
-  'Derbyshire',
-  'Devon',
-  'Dorset',
-  'Durham',
-  'East Riding of Yorkshire',
-  'East Sussex',
-  'Essex',
-  'Gloucestershire',
-  'Greater London',
-  'Greater Manchester',
-  'Hampshire',
-  'Herefordshire',
-  'Hertfordshire',
-  'Isle of Wight',
-  'Kent',
-  'Lancashire',
-  'Leicestershire',
-  'Lincolnshire',
-  'Merseyside',
-  'Norfolk',
-  'North Yorkshire',
-  'Northamptonshire',
-  'Northumberland',
-  'Nottinghamshire',
-  'Oxfordshire',
-  'Rutland',
-  'Shropshire',
-  'Somerset',
-  'South Yorkshire',
-  'Staffordshire',
-  'Suffolk',
-  'Surrey',
-  'Tyne and Wear',
-  'Warwickshire',
-  'West Midlands',
-  'West Sussex',
-  'West Yorkshire',
-  'Wiltshire',
-  'Worcestershire']
+export default AddPlayers

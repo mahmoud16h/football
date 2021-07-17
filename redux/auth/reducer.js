@@ -1,11 +1,7 @@
 import {ACTIONS} from "./actions";
 
-const initialState = {
-    loggedIn: !!localStorage.getItem('token'),
-    email: localStorage.getItem('email') || '',
-    id: localStorage.getItem('userId')
-}
-
+const initialState = {isLoggedIn: false}
+console.log('initialize')
 const AuthReducer = (state = initialState, action) => {
     switch (action.type) {
         case ACTIONS.LOG_IN_SUCCESS:
@@ -14,6 +10,13 @@ const AuthReducer = (state = initialState, action) => {
                 email: action.payload.email,
                 firstName: action.payload.firstName,
                 lastName: action.payload.lastName,
+                id: action.payload.id,
+            }
+        case 'SET_INIT':
+            console.log('action', action.payload)
+            return {
+                loggedIn: true,
+                email: action.payload.email,
                 id: action.payload.id,
             }
         case ACTIONS.LOG_OUT:

@@ -5,11 +5,7 @@ export const ACTIONS = {
 }
 
 export const LoginSuccessful = (data) => {
-    if (isLocalStorageAvailable()) {
-        localStorage.setItem('token', data.accessToken)
-        localStorage.setItem('userId', data.id)
-        localStorage.setItem('email', data.email)
-    }
+
     axios.defaults.headers['x-access-token'] = data.accessToken;
     const payload = {
         email: data.email,
@@ -24,25 +20,13 @@ export const LoginSuccessful = (data) => {
     }
 }
 
+export const setInit = (payload) => ({
+      type: 'SET_INIT',
+      payload
+  }
+)
 
-export const logout = () => {
-    if (isLocalStorageAvailable()) {
-        localStorage.removeItem('token')
-        localStorage.removeItem('userId')
-        localStorage.removeItem('email')
-    }
-    return {
-        type: ACTIONS.LOG_OUT
-    }
-}
-
-const isLocalStorageAvailable = () =>{
-    var test = 'test';
-    try {
-        localStorage.setItem(test, test);
-        localStorage.removeItem(test);
-        return true;
-    } catch(e) {
-        return false;
-    }
-}
+export const logoutAction = () => ({
+      type: ACTIONS.LOG_OUT
+  }
+)
