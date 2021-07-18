@@ -1,12 +1,10 @@
-import {Text, ScrollView, Button, Image, View} from 'react-native';
+import {Text, View} from 'react-native';
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import CreateTeam from './screens/createTeam';
 import TeamView from './screens/teamView';
-import {LinearGradient} from 'expo-linear-gradient';
-import Card from '../../components/card';
+import TeamsHome from './screens/teamsHome';
 const Stack = createStackNavigator();
-import addOne from '../../assets/addOne.png'
 
 const config = {
   animation: 'spring',
@@ -70,32 +68,11 @@ const CardOptions = {
 const MyStack = () => {
   return (
     <Stack.Navigator screenOptions={CardOptions}>
-      <Stack.Screen name="Teams" options={{headerShown: false}} component={Teams} />
+      <Stack.Screen name="Teams" options={{headerShown: false}} component={TeamsHome} />
       <Stack.Screen name="Create team" component={CreateTeam}/>
       <Stack.Screen name="My team" component={TeamView}/>
       <Stack.Screen name="Join team" >{() => <View><Text>Join</Text></View>}</Stack.Screen>
     </Stack.Navigator>
-  );
-}
-
-const Teams = ({ navigation }) => {
-  return (
-    <ScrollView style={{ flex: 1 }}>
-      <View style={{ flex: 1, backgroundColor: 'transparent', justifyContent: 'space-evenly', display: 'flex', flexDirection: 'row', width: '100%', paddingTop: 20 }}>
-        <Card onPress={() => navigation.navigate('Create team')}>
-          <View style={{ justifyContent: 'center', alignItems: 'center', display: 'flex', width: '100%'}}>
-            <Image style={{ width: 77, height: 80}} source={addOne} />
-            <Text style={{ fontSize: 18, paddingTop: 10}}>Create Team</Text>
-          </View>
-        </Card>
-        <Card onPress={() => navigation.navigate('Join team')}>
-          <View style={{ justifyContent: 'center', alignItems: 'center', display: 'flex', width: '100%'}}>
-            <Image style={{ width: 77, height: 80}} source={addOne} />
-            <Text style={{ fontSize: 18, paddingTop: 10}}>Join Team</Text>
-          </View>
-        </Card>
-      </View>
-    </ScrollView>
   );
 }
 

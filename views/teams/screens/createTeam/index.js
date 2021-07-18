@@ -1,12 +1,14 @@
-import {Text, View, ScrollView} from 'react-native';
 import React, {useState} from 'react';
+import {Text, View, ScrollView} from 'react-native';
+import axios from 'axios';
+import {Ionicons} from '@expo/vector-icons';
 import Input from '../../../../components/input';
 import DropDownPicker from 'react-native-dropdown-picker';
 
 import theme from '../../../../views/theme';
 import Button from '../../../../components/button';
 import ImagePicker from '../../../../components/imagePicker';
-import {Ionicons} from '@expo/vector-icons';
+import useAuth from '../../../../redux/auth/hooks';
 
 const CreateTeam = ({ navigation }) => {
   const [image, setImage] = useState(null);
@@ -14,7 +16,25 @@ const CreateTeam = ({ navigation }) => {
   const [open, setOpen] = useState(false);
   const [teamCreated, setTeamCreated] = useState(false);
   const [city, setCity] = useState('')
+  const { id } = useAuth();
   const items = cities.map(city => ({ label: city, value: city}))
+  console.log('id', id)
+
+  const createTeam = async () => {
+    const payload = {
+      name: teamName,
+      managerId: id,
+      city,
+    }
+    try {
+      await axios.post('teams', payload)
+      setTeamCreated(true)
+    } catch (e) {
+      console.log('Error creating team', e)
+    }
+  }
+
+  const canSubmit = teamName && city
 
   return (
     <ScrollView keyboardShouldPersistTaps='handled' contentContainerStyle={{ flex: 1, alignItems: 'center' }}>
@@ -40,7 +60,7 @@ const CreateTeam = ({ navigation }) => {
         />
       </View>
 
-      {!teamCreated && <Button title="Create team" onPress={() => setTeamCreated(true)}/>}
+      {!teamCreated && <Button disabled={!canSubmit} title="Create team" onPress={createTeam}/>}
       {teamCreated && <Button secondary title="Add players manually" onPress={() => navigation.navigate('My team')}/>}
       {teamCreated && <Button Icon={() => <Ionicons name="share" size={20} />} title="Share with players" onPress={() => setTeamCreated(true)}/>}
     </ScrollView>

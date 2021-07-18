@@ -2,11 +2,24 @@ import React from 'react';
 import {TouchableHighlight, Text, View} from 'react-native';
 import theme from '../../views/theme';
 
-const Button = ({ secondary, Icon, ...props}) => (
+const Button = ({ secondary, Icon, disabled, onPress, ...props}) => {
+  const backgroundColor = () => {
+    switch (true){
+      case !!disabled:
+        return theme.inactiveGrey
+      case !!secondary:
+        return 'transparent'
+      default:
+        return theme.activeWhite
+    }
+  }
+
+  return (
   <TouchableHighlight
+    onPress={!disabled ? onPress : null}
     underlayColor={theme.inactiveGrey}
     style={{
-      backgroundColor: secondary ? 'transparent' : theme.activeWhite,
+      backgroundColor: backgroundColor(),
       borderColor: secondary ? theme.activeWhite : 'transparent',
       borderWidth: 1,
       width: 240,
@@ -25,10 +38,10 @@ const Button = ({ secondary, Icon, ...props}) => (
       justifyContent: 'space-evenly',
       alignItems: 'center'
     }}>
-      {!!Icon && <Icon />}
-      <Text style={{ color: secondary ? '#D8D8D8' : 'black', fontSize: 18}}>{props.title}</Text>
+      {!!Icon && <Icon/>}
+      <Text style={{color: secondary ? theme.activeWhite : 'black', fontSize: 18}}>{props.title}</Text>
     </View>
   </TouchableHighlight>
-);
+)};
 
 export default Button

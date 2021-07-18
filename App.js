@@ -4,11 +4,26 @@ import {StyleSheet, Text, SafeAreaView, View} from 'react-native';
 import { Provider } from 'react-redux'
 import store from './redux/store'
 import useAuth from './redux/auth/hooks';
-import Main from './components/main';
 import axios from 'axios';
 import { LinearGradient } from 'expo-linear-gradient';
+import LoginWidget from './components/loginWidget';
+import NavigationWidget from './components/navigationWidget';
 
-axios.defaults.baseURL = 'https://api-service-dot-new-app-2021-313715.ew.r.appspot.com/';
+axios.defaults.baseURL = 'http://192.168.1.216:8080/';
+
+
+const Main = () =>  {
+  const { loggedIn } = useAuth()
+  if (!loggedIn) return (
+    <View style={styles.container}>
+      <StatusBar />
+      <LoginWidget />
+    </View>
+  )
+  return (
+    <NavigationWidget />
+  );
+}
 
 export default function App() {
   return (
@@ -29,7 +44,6 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
   },

@@ -30,8 +30,8 @@ const AddPlayers = () => {
 
   return (
     <View  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 30 }}>
-      <Input value={playerName} onChangeText={setPlayerName} placeholder="Player name"/>
-      <Input keyboardType="numeric" value={playerNumber} onChangeText={setPlayerNumber} placeholder="Player phone number"/>
+      <Input label="Player name" value={playerName} onChangeText={setPlayerName} placeholder="Player name"/>
+      <Input label="Player mobile" keyboardType="numeric" value={playerNumber} onChangeText={setPlayerNumber} placeholder="Player mobile"/>
       <Card width={50} height={50} onPress={addPLayer}>
         <View style={{ justifyContent: 'center', alignItems: 'center', display: 'flex', width: '100%'}}>
           <Image style={{ width: 20, height: 22}} source={addOne} />

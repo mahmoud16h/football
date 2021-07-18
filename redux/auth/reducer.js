@@ -13,7 +13,6 @@ const AuthReducer = (state = initialState, action) => {
                 id: action.payload.id,
             }
         case 'SET_INIT':
-            console.log('action', action.payload)
             return {
                 loggedIn: true,
                 email: action.payload.email,
