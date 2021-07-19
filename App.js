@@ -8,17 +8,15 @@ import axios from 'axios';
 import { LinearGradient } from 'expo-linear-gradient';
 import LoginWidget from './components/loginWidget';
 import NavigationWidget from './components/navigationWidget';
+import Auth from './views/auth'
 
-axios.defaults.baseURL = 'http://192.168.1.216:8080/';
+axios.defaults.baseURL = 'http://localhost:8080/';
 
 
 const Main = () =>  {
   const { loggedIn } = useAuth()
   if (!loggedIn) return (
-    <View style={styles.container}>
-      <StatusBar />
-      <LoginWidget />
-    </View>
+    <Auth />
   )
   return (
     <NavigationWidget />
@@ -40,11 +38,3 @@ export default function App() {
     </Provider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

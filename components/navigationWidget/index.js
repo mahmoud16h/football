@@ -7,6 +7,7 @@ import Home from '../../views/home';
 import Tournaments from '../../views/tournaments';
 import Teams from '../../views/teams';
 import Profile from '../../views/profile';
+import Play from '../../views/play';
 
 const Tab = createBottomTabNavigator();
 const MyTheme = {
@@ -56,7 +57,7 @@ const MyTabs = () => (
   >
     <Tab.Screen name="Home" component={Home} />
     <Tab.Screen name="Teams" component={Teams} />
-    <Tab.Screen name="Play" component={Tournaments} />
+    <Tab.Screen name="Play" component={Play} />
     <Tab.Screen name="Tournaments" component={Tournaments} />
     <Tab.Screen name="Profile" component={Profile} />
   </Tab.Navigator>

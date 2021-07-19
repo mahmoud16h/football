@@ -1,10 +1,9 @@
 import {Text, View} from 'react-native';
 import React from 'react';
 import { createStackNavigator, TransitionSpecs } from '@react-navigation/stack';
-import CreateTeam from './screens/createTeam';
-import TeamAddPlayers from './screens/teamAddPlayers';
-import TeamsHome from './screens/teamsHome';
-import TeamView from './screens/teamView';
+import NewGame from './screens/newGame';
+import SelectPlayers from './screens/selectPlayers';
+import PlayHome from './screens/playHome';
 const Stack = createStackNavigator();
 
 const TransitionScreen = {
@@ -48,7 +47,7 @@ const CardOptions = {
     backgroundColor: 'transparent',
   },
   headerTintColor: '#fff',
-    headerTitleStyle: {
+  headerTitleStyle: {
     fontWeight: 'bold',
   },
   ...TransitionScreen
@@ -57,11 +56,9 @@ const CardOptions = {
 const MyStack = () => {
   return (
     <Stack.Navigator screenOptions={CardOptions}>
-      <Stack.Screen name="Teams" options={{headerShown: false}} component={TeamsHome} />
-      <Stack.Screen name="Create team" component={CreateTeam}/>
-      <Stack.Screen name="Players" component={TeamAddPlayers}/>
-      <Stack.Screen name="Team" component={TeamView}/>
-      <Stack.Screen name="Join team" >{() => <View><Text>Join</Text></View>}</Stack.Screen>
+      <Stack.Screen name="Play" options={{headerShown: false}} component={PlayHome} />
+      <Stack.Screen name="New game" component={NewGame}/>
+      <Stack.Screen name="Players" component={SelectPlayers}/>
     </Stack.Navigator>
   );
 }

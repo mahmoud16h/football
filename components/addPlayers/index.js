@@ -1,35 +1,47 @@
-import {Text, View, ScrollView, Image} from 'react-native';
+import {Text, View, ScrollView, Image, ActivityIndicator} from 'react-native';
 import React, {useState} from 'react';
 import Input from '../input';
 import {Ionicons} from '@expo/vector-icons';
 import theme from '../../views/theme';
 import addOne from '../../assets/addOne.png';
 import Card from '../card';
+import capitalize from '../../utils/capitalize';
+import axios from 'axios';
+import Button from '../button';
 
-const AddPlayers = () => {
+const AddPlayers = ({ team = []}) => {
   const [playerName, setPlayerName] = useState('')
   const [playerNumber, setPlayerNumber] = useState('')
-  const [players, setPlayers] = useState([])
+  const [players, setPlayers] = useState(team?.players || [])
+  console.log('players',players)
 
-  const addPLayer = () => {
+
+  const addPLayer = async () => {
     const playerNumberExists = players.find(player => player.number === playerNumber)
     const canAddPlayer = !!playerName.length && !!playerNumber.length
     if (!playerNumberExists && canAddPlayer) {
-      // check on backend if the players number already exists and then replace the name
-      // given here with the name the player has actually registered with
-      setPlayers([...players, { name: playerName, number: playerNumber }])
-      setPlayerName('')
-      setPlayerNumber('')
+
+      try {
+        console.log('url', `teams/${team._id}/player`)
+        const response = await axios.put(`teams/${team._id}/player`, {name: playerName, mobile: playerNumber })
+        console.log('response', response)
+        console.log('response.data', response.data)
+        setPlayers([...players, { name: playerName, mobile: playerNumber }])
+        setPlayerName('')
+        setPlayerNumber('')
+      } catch (e){
+        console.log('error', e)
+      }
     }
   }
 
-  const removePlayer = (number) => {
-    const newPlayers = players.filter(player => player.number !== number)
+  const removePlayer = (mobile) => {
+    const newPlayers = players.filter(player => player.mobile !== mobile)
     setPlayers(newPlayers)
   }
 
   return (
-    <View  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 30 }}>
+    <ScrollView  contentContainerStyle={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 30, marginTop: 10 }}>
       <Input label="Player name" value={playerName} onChangeText={setPlayerName} placeholder="Player name"/>
       <Input label="Player mobile" keyboardType="numeric" value={playerNumber} onChangeText={setPlayerNumber} placeholder="Player mobile"/>
       <Card width={50} height={50} onPress={addPLayer}>
@@ -38,30 +50,37 @@ const AddPlayers = () => {
           <Text style={{ fontSize: 8, paddingTop: 2}}>Add player</Text>
         </View>
       </Card>
-      <View style={{ width: 330, height: 1, borderColor: theme.inactiveGrey, borderStyle: 'solid', borderWidth: 1, marginLeft: 6, marginTop: 20}}/>
-      <Text style={{ color: theme.activeWhite, fontSize: 20, marginLeft: 8, marginTop: 20, marginBottom: 20, fontWeight: 'bold'}}>Players</Text>
+      <View style={{ width: 330, height: 1, borderColor: theme.inactiveGrey, borderStyle: 'solid', borderWidth: 1, marginLeft: 6, marginTop: 20, marginBottom: 30}}/>
+
       {!players.length && <Text style={{ color: theme.activeWhite, fontSize: 16, marginLeft: 8, fontWeight: 'bold'}}>You have no players in your team</Text>}
-      {players.map(({ name, number }) =>
-        <View key={number} style={{
+      {players.map(({ name, mobile, id }) =>
+        <View key={mobile} style={{
           display: 'flex',
-          backgroundColor: theme.activeWhite,
+          backgroundColor: id ? theme.activeWhite : theme.inactiveGrey,
           flexDirection: 'row',
-          width: 300,
+          width: 200,
           justifyContent: 'space-between',
           alignItems: 'center',
-          borderStyle: 'dashed',
+          borderStyle: 'solid',
           borderWidth: 1,
           borderRadius: 6,
           borderColor: theme.activeWhite,
           padding: 4,
           margin: 4
         }}>
-          <Text style={{ fontSize: 16, marginLeft: 8, fontWeight: 'bold'}}>{name}</Text>
-          <Text style={{ fontSize: 16, marginLeft: 8, fontWeight: 'bold'}}>{number}</Text>
-          <Ionicons name="trash-outline" size={20} onPress={() => removePlayer(number)} />
+          <View>
+            <Text style={{ fontSize: 16, marginLeft: 8, fontWeight: 'bold'}}>{capitalize(name)}</Text>
+            <Text style={{ fontSize: 14, marginLeft: 8, fontWeight: 'bold', color: id && theme.inactiveGrey}}>{mobile}</Text>
+          </View>
+          <View style={{ display: 'flex', flexDirection: 'row'}}>
+            { !id && <ActivityIndicator size="small" /> }
+            <Ionicons name="trash-outline" size={20} onPress={() => removePlayer(mobile)} />
+          </View>
         </View>
       )}
-    </View>
+      <Button secondary title="Done" />
+
+    </ScrollView>
   );
 }
 

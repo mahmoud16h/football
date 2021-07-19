@@ -2,7 +2,7 @@ import React from 'react';
 import {TouchableHighlight, Text, View} from 'react-native';
 import theme from '../../views/theme';
 
-const Button = ({ secondary, Icon, disabled, onPress, ...props}) => {
+const Button = ({ secondary, Icon, disabled, onPress, width, ...props}) => {
   const backgroundColor = () => {
     switch (true){
       case !!disabled:
@@ -22,7 +22,7 @@ const Button = ({ secondary, Icon, disabled, onPress, ...props}) => {
       backgroundColor: backgroundColor(),
       borderColor: secondary ? theme.activeWhite : 'transparent',
       borderWidth: 1,
-      width: 240,
+      width: width || 240,
       height: 50,
       borderRadius: 6,
       margin: 10,

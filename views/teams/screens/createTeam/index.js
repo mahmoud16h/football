@@ -9,12 +9,13 @@ import theme from '../../../../views/theme';
 import Button from '../../../../components/button';
 import ImagePicker from '../../../../components/imagePicker';
 import useAuth from '../../../../redux/auth/hooks';
+import DropDown from '../../../../components/dropDown';
 
 const CreateTeam = ({ navigation }) => {
   const [image, setImage] = useState(null);
   const [teamName, setTeamName] = useState('')
   const [open, setOpen] = useState(false);
-  const [teamCreated, setTeamCreated] = useState(false);
+  const [teamCreated, setTeamCreated] = useState(null);
   const [city, setCity] = useState('')
   const { id } = useAuth();
   const items = cities.map(city => ({ label: city, value: city}))
@@ -27,8 +28,9 @@ const CreateTeam = ({ navigation }) => {
       city,
     }
     try {
-      await axios.post('teams', payload)
-      setTeamCreated(true)
+      const response = await axios.post('teams', payload)
+      console.log('response', response.data)
+      setTeamCreated(response.data)
     } catch (e) {
       console.log('Error creating team', e)
     }
@@ -40,28 +42,16 @@ const CreateTeam = ({ navigation }) => {
     <ScrollView keyboardShouldPersistTaps='handled' contentContainerStyle={{ flex: 1, alignItems: 'center' }}>
       <ImagePicker image={image} setImage={setImage} />
       <Input disabled={teamCreated} label="Team name" value={teamName} onChangeText={setTeamName} placeholder="Team name"/>
-      <View style={{ display: 'flex', flexDirection: 'column', marginTop: 8, marginBottom: 20}}>
-        <Text style={{ color: theme.activeWhite, fontSize: 16, marginLeft: 8}}>City</Text>
-        <DropDownPicker
-          disabled={teamCreated}
-          modalContentContainerStyle={{ backgroundColor: theme.inactiveGrey }}
-          searchTextInputStyle={{ color: theme.activeWhite }}
-          style={{ backgroundColor: "transparent",  borderColor: theme.activeWhite }}
-          containerStyle={{ width: 250, margin: 6, backgroundColor: 'transparent' }}
-          textStyle={{ color: theme.activeWhite }}
-          listMode="MODAL"
-          open={open}
-          value={city}
-          items={items}
-          setOpen={setOpen}
-          setValue={setCity}
-          searchable={true}
-          searchPlaceholder="Search..."
-        />
-      </View>
-
+      <DropDown
+        disabled={teamCreated}
+        open={open}
+        value={city}
+        items={items}
+        setOpen={setOpen}
+        setValue={setCity}
+      />
       {!teamCreated && <Button disabled={!canSubmit} title="Create team" onPress={createTeam}/>}
-      {teamCreated && <Button secondary title="Add players manually" onPress={() => navigation.navigate('My team')}/>}
+      {teamCreated && <Button secondary title="Add players manually" onPress={() => navigation.navigate('Players', { teamId: teamCreated})}/>}
       {teamCreated && <Button Icon={() => <Ionicons name="share" size={20} />} title="Share with players" onPress={() => setTeamCreated(true)}/>}
     </ScrollView>
   );
