@@ -1,4 +1,4 @@
-import {Text, View, ScrollView, Image, ActivityIndicator} from 'react-native';
+import {Text, View, ScrollView, Image, ActivityIndicator, KeyboardAvoidingView} from 'react-native';
 import React, {useState} from 'react';
 import Input from '../input';
 import {Ionicons} from '@expo/vector-icons';
@@ -13,8 +13,6 @@ const AddPlayers = ({ team = []}) => {
   const [playerName, setPlayerName] = useState('')
   const [playerNumber, setPlayerNumber] = useState('')
   const [players, setPlayers] = useState(team?.players || [])
-  console.log('players',players)
-
 
   const addPLayer = async () => {
     const playerNumberExists = players.find(player => player.number === playerNumber)
@@ -22,11 +20,8 @@ const AddPlayers = ({ team = []}) => {
     if (!playerNumberExists && canAddPlayer) {
 
       try {
-        console.log('url', `teams/${team._id}/player`)
         const response = await axios.put(`teams/${team._id}/player`, {name: playerName, mobile: playerNumber })
-        console.log('response', response)
-        console.log('response.data', response.data)
-        setPlayers([...players, { name: playerName, mobile: playerNumber }])
+        setPlayers([...players, response.data])
         setPlayerName('')
         setPlayerNumber('')
       } catch (e){
@@ -41,7 +36,7 @@ const AddPlayers = ({ team = []}) => {
   }
 
   return (
-    <ScrollView  contentContainerStyle={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 30, marginTop: 10 }}>
+    <ScrollView keyboardShouldPersistTaps='handled' contentContainerStyle={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 30, marginTop: 10 }}>
       <Input label="Player name" value={playerName} onChangeText={setPlayerName} placeholder="Player name"/>
       <Input label="Player mobile" keyboardType="numeric" value={playerNumber} onChangeText={setPlayerNumber} placeholder="Player mobile"/>
       <Card width={50} height={50} onPress={addPLayer}>
@@ -73,7 +68,7 @@ const AddPlayers = ({ team = []}) => {
             <Text style={{ fontSize: 14, marginLeft: 8, fontWeight: 'bold', color: id && theme.inactiveGrey}}>{mobile}</Text>
           </View>
           <View style={{ display: 'flex', flexDirection: 'row'}}>
-            { !id && <ActivityIndicator size="small" /> }
+            {/*{ !id && <ActivityIndicator size="small" /> }*/}
             <Ionicons name="trash-outline" size={20} onPress={() => removePlayer(mobile)} />
           </View>
         </View>

@@ -7,7 +7,7 @@ const AuthReducer = (state = initialState, action) => {
         case ACTIONS.LOG_IN_SUCCESS:
             return {
                 loggedIn: true,
-                email: action.payload.email,
+                mobile: action.payload.mobile,
                 firstName: action.payload.firstName,
                 lastName: action.payload.lastName,
                 id: action.payload.id,
@@ -15,7 +15,7 @@ const AuthReducer = (state = initialState, action) => {
         case 'SET_INIT':
             return {
                 loggedIn: true,
-                email: action.payload.email,
+                mobile: action.payload.mobile,
                 id: action.payload.id,
             }
         case ACTIONS.LOG_OUT:

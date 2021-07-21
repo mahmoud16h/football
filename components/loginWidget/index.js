@@ -19,6 +19,7 @@ export default function LoginWidget({navigation}) {
     AsyncStorage.multiGet(['token', 'userId', 'mobile'])
       .then((result) => {
         if (result[0][1] !== null) {
+          console.log('result', result)
           axios.defaults.headers['x-access-token'] = result[0][1];
           dispatch(setInit({
             id: result[1][1],

@@ -8,7 +8,7 @@ export const LoginSuccessful = (data) => {
 
     axios.defaults.headers['x-access-token'] = data.accessToken;
     const payload = {
-        email: data.email,
+        mobile: data.mobile,
         firstName: data.firstName,
         lastName: data.lastName,
         id: data.id,

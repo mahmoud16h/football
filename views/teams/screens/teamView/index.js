@@ -18,7 +18,7 @@ const TeamView = ({ navigation, route }) => {
   }, [isFocused])
 
   if (!isFocused) return null
-  if (isLoadingTeam) return <LoadingScreen />
+  if (isLoadingTeam || !team) return <LoadingScreen />
   return (
     <View style={{ flex: 1, alignItems: 'center'}}>
       <Text style={{ fontSize: 40, color: theme.activeWhite }}>{capitalize(team.name)}</Text>

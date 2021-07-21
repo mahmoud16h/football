@@ -1,6 +1,7 @@
 export const ACTIONS = {
     SET_TEAMS:'SET_TEAMS',
     SET_TEAM:'SET_TEAM',
+    SET_PENDING_TEAM_INVITES: 'SET_PENDING_TEAM_INVITES',
 }
 
 export const setTeams = (teams) => {
@@ -17,6 +18,15 @@ export const setTeam = (team) => {
         type: ACTIONS.SET_TEAM,
         payload: {
             team
+        }
+    }
+}
+
+export const setPendingTeamInvites = (teams) => {
+    return {
+        type: ACTIONS.SET_PENDING_TEAM_INVITES,
+        payload: {
+            teams
         }
     }
 }

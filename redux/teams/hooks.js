@@ -7,8 +7,10 @@ import {setTeam as setTeamAction} from "./actions";
 const useTeams = ({ teamId, playerId }) => {
     const { teams } = useSelector(state => state.teams);
     const { team } = useSelector(state => state.teams);
+    const { pendingTeamInvites } = useSelector(state => state.teams);
     const [isLoading, setIsLoading] = useState(true)
     const [isLoadingTeam, setIsLoadingTeam] = useState(true)
+    const [isLoadingPendingTeams, setIsLoadingPendingTeams] = useState(true)
     const dispatch = useDispatch()
 
 
@@ -44,13 +46,28 @@ const useTeams = ({ teamId, playerId }) => {
         setIsLoadingTeam(false)
     }
 
+    const getPendingTeamInvites = async () => {
+        setIsLoadingPendingTeams(true)
+        const url = `teams?playerId=${playerId}`;
+        try {
+            const response = await axios.get(url)
+            setTeams(response.data)
+        } catch (e) {
+            console.log(e.response?.data.message, 'error')
+        }
+        setIsLoadingPendingTeams(false)
+    }
+
     return {
         teams,
         team,
+        pendingTeamInvites,
         isLoading,
         isLoadingTeam,
+        isLoadingPendingTeams,
         getTeams,
         getTeam,
+        getPendingTeamInvites,
     }
 }
 

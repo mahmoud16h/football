@@ -51,7 +51,7 @@ const CreateTeam = ({ navigation }) => {
         setValue={setCity}
       />
       {!teamCreated && <Button disabled={!canSubmit} title="Create team" onPress={createTeam}/>}
-      {teamCreated && <Button secondary title="Add players manually" onPress={() => navigation.navigate('Players', { teamId: teamCreated})}/>}
+      {teamCreated && <Button secondary title="Add players manually" onPress={() => navigation.navigate('Players', { teamId: teamCreated._id })}/>}
       {teamCreated && <Button Icon={() => <Ionicons name="share" size={20} />} title="Share with players" onPress={() => setTeamCreated(true)}/>}
     </ScrollView>
   );
