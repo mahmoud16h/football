@@ -15,12 +15,11 @@ const Search = ({ navigation }) => {
 
   const searchTeams = async (value) => {
     setSearchValue(value)
-    if (!value) return;
+    if (!value) return setTeams([]);
     setIsSearching(true)
-    const url = `teams?name=${value.toLowerCase()}`
+    const url = `teams/search/${value.toLowerCase()}`
     try {
       const response = await axios.get(url)
-      console.log('response', response.data)
       setTeams(response.data)
     } catch (e) {
       console.log(e.response?.data.message, 'error')

@@ -3,11 +3,12 @@ import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {setTeams as setTeamsAction} from "./actions";
 import {setTeam as setTeamAction} from "./actions";
+import {setPendingTeamIds as setPendingTeamIdsAction} from "./actions";
 
-const useTeams = ({ teamId, playerId }) => {
+const useTeams = () => {
     const { teams } = useSelector(state => state.teams);
     const { team } = useSelector(state => state.teams);
-    const { pendingTeamInvites } = useSelector(state => state.teams);
+    const { pendingTeamIds } = useSelector(state => state.teams);
     const [isLoading, setIsLoading] = useState(true)
     const [isLoadingTeam, setIsLoadingTeam] = useState(true)
     const [isLoadingPendingTeams, setIsLoadingPendingTeams] = useState(true)
@@ -22,9 +23,13 @@ const useTeams = ({ teamId, playerId }) => {
         dispatch(setTeamAction(products))
     }
 
-    const getTeams = async () => {
+    const setPendingTeamIds = (products) => {
+        dispatch(setPendingTeamIdsAction(products))
+    }
+
+    const getTeams = async (id) => {
         setIsLoading(true)
-        const url = playerId ? `teams?playerId=${playerId}` : 'teams'
+        const url = id ? `teams?playerId=${id}` : 'teams'
         try {
             const response = await axios.get(url)
             setTeams(response.data)
@@ -34,9 +39,9 @@ const useTeams = ({ teamId, playerId }) => {
         setIsLoading(false)
     }
 
-    const getTeam = async () => {
+    const getTeam = async (id) => {
         setIsLoadingTeam(true)
-        const url = `teams?id=${teamId}`
+        const url = `teams/${id}`
         try {
             const response = await axios.get(url)
             setTeam(response.data)
@@ -46,28 +51,28 @@ const useTeams = ({ teamId, playerId }) => {
         setIsLoadingTeam(false)
     }
 
-    const getPendingTeamInvites = async () => {
+    const getPendingTeamRequests = async (id) => {
         setIsLoadingPendingTeams(true)
-        const url = `teams?playerId=${playerId}`;
         try {
-            const response = await axios.get(url)
-            setTeams(response.data)
+            const response = await axios.get(`contracts/player/${id}?status=pending`)
+            setPendingTeamIds(response.data.map(contract => contract.teamId))
         } catch (e) {
-            console.log(e.response?.data.message, 'error')
+            console.log('error', e)
         }
         setIsLoadingPendingTeams(false)
+
     }
 
     return {
         teams,
         team,
-        pendingTeamInvites,
+        pendingTeamIds,
         isLoading,
         isLoadingTeam,
         isLoadingPendingTeams,
         getTeams,
         getTeam,
-        getPendingTeamInvites,
+        getPendingTeamRequests,
     }
 }
 

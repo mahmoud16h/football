@@ -17,7 +17,6 @@ const TeamAddPlayers = ({ navigation, route }) => {
   }, [isFocused])
 
 
-  console.log('PLAYERS teamId', teamId)
   if (isLoadingTeam) return <LoadingScreen />
   return (
     <View keyboardShouldPersistTaps='handled' style={{ flex: 1, alignItems: 'center', marginBottom: 20 }}>

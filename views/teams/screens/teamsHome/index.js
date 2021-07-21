@@ -7,10 +7,6 @@ import Search from './tabs/search';
 const TeamsHome = ({ navigation }) => {
   const [currentTab, setCurrentTab] = useState('myTeams')
 
-  const hasPendingTeamInvites = () => {
-
-  }
-
   return (
     <View style={{ flex: 1, display: 'flex', alignItems: 'center'}}>
       <View style={{ display: 'flex', flexDirection: 'row'}}>

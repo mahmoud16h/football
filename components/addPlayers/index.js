@@ -1,5 +1,5 @@
 import {Text, View, ScrollView, Image, ActivityIndicator, KeyboardAvoidingView} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Input from '../input';
 import {Ionicons} from '@expo/vector-icons';
 import theme from '../../views/theme';
@@ -12,16 +12,28 @@ import Button from '../button';
 const AddPlayers = ({ team = []}) => {
   const [playerName, setPlayerName] = useState('')
   const [playerNumber, setPlayerNumber] = useState('')
-  const [players, setPlayers] = useState(team?.players || [])
+  const [players, setPlayers] = useState([])
 
+  useEffect(() => {
+    fetchContracts()
+  }, [])
+  const fetchContracts = async () => {
+    try {
+      const response = await axios.get(`contracts/team/${team._id}`)
+      setPlayers(response.data || [])
+    } catch (e) {
+      console.log('error', e)
+    }
+  }
   const addPLayer = async () => {
     const playerNumberExists = players.find(player => player.number === playerNumber)
     const canAddPlayer = !!playerName.length && !!playerNumber.length
     if (!playerNumberExists && canAddPlayer) {
 
       try {
-        const response = await axios.put(`teams/${team._id}/player`, {name: playerName, mobile: playerNumber })
-        setPlayers([...players, response.data])
+        const response = await axios.post(`contracts`, {playerName, playerMobile: playerNumber, teamId: team._id })
+        const {playerName: name, playerMobile, playerId } = response.data
+        setPlayers([...players, { playerName: name, playerMobile, playerId }])
         setPlayerName('')
         setPlayerNumber('')
       } catch (e){
@@ -48,7 +60,7 @@ const AddPlayers = ({ team = []}) => {
       <View style={{ width: 330, height: 1, borderColor: theme.inactiveGrey, borderStyle: 'solid', borderWidth: 1, marginLeft: 6, marginTop: 20, marginBottom: 30}}/>
 
       {!players.length && <Text style={{ color: theme.activeWhite, fontSize: 16, marginLeft: 8, fontWeight: 'bold'}}>You have no players in your team</Text>}
-      {players.map(({ name, mobile, id }) =>
+      {players.map(({ playerName: name, playerMobile: mobile, playerId: id }) =>
         <View key={mobile} style={{
           display: 'flex',
           backgroundColor: id ? theme.activeWhite : theme.inactiveGrey,
@@ -64,7 +76,7 @@ const AddPlayers = ({ team = []}) => {
           margin: 4
         }}>
           <View>
-            <Text style={{ fontSize: 16, marginLeft: 8, fontWeight: 'bold'}}>{capitalize(name)}</Text>
+            <Text style={{ fontSize: 16, marginLeft: 8, fontWeight: 'bold'}}>{name}</Text>
             <Text style={{ fontSize: 14, marginLeft: 8, fontWeight: 'bold', color: id && theme.inactiveGrey}}>{mobile}</Text>
           </View>
           <View style={{ display: 'flex', flexDirection: 'row'}}>

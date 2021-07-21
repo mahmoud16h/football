@@ -17,11 +17,11 @@ const NewGame = ({ navigation, route }) => {
   const [date, setDate] = useState(new Date());
   const [gameType, setGameType] = useState(5)
   const { id: playerId } = useAuth();
-  const { teams, isLoading, getTeams } = useTeams({ playerId })
+  const { teams, isLoading, getTeams } = useTeams()
   const myTeamsValues = teams.map(team => ({ label: team.name, value: team._id}))
 
   useEffect(() => {
-    isFocused && getTeams()
+    isFocused && getTeams(playerId)
   }, [isFocused])
 
   const onChangeDateTime = (event, selectedDate) => {

@@ -21,7 +21,6 @@ const SelectPlayers = ({ navigation, route }) => {
       getAwayTeam(),]).then(() => setLoadingAway(false)
     )
   }, [])
-  console.log('team', team)
   const getAwayTeam = async () => {
     setLoadingAway(true)
     const url = `teams?id=${away}`

@@ -10,7 +10,7 @@ import LoginWidget from './components/loginWidget';
 import NavigationWidget from './components/navigationWidget';
 import Auth from './views/auth'
 
-axios.defaults.baseURL = 'http://192.168.1.216:8080/';
+axios.defaults.baseURL = 'http://localhost:8080/';
 
 
 const Main = () =>  {

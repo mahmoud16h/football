@@ -19,7 +19,6 @@ const CreateTeam = ({ navigation }) => {
   const [city, setCity] = useState('')
   const { id } = useAuth();
   const items = cities.map(city => ({ label: city, value: city}))
-  console.log('id', id)
 
   const createTeam = async () => {
     const payload = {
@@ -29,7 +28,6 @@ const CreateTeam = ({ navigation }) => {
     }
     try {
       const response = await axios.post('teams', payload)
-      console.log('response', response.data)
       setTeamCreated(response.data)
     } catch (e) {
       console.log('Error creating team', e)
@@ -51,7 +49,7 @@ const CreateTeam = ({ navigation }) => {
         setValue={setCity}
       />
       {!teamCreated && <Button disabled={!canSubmit} title="Create team" onPress={createTeam}/>}
-      {teamCreated && <Button secondary title="Add players manually" onPress={() => navigation.navigate('Players', { teamId: teamCreated._id })}/>}
+      {teamCreated && <Button secondary title="Add players manually" onPress={() => navigation.navigate('Players', { teamId: teamCreated })}/>}
       {teamCreated && <Button Icon={() => <Ionicons name="share" size={20} />} title="Share with players" onPress={() => setTeamCreated(true)}/>}
     </ScrollView>
   );

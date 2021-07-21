@@ -16,7 +16,6 @@ export default function SignUpWidget() {
   const dispatch = useDispatch();
 
   const signup = async () => {
-    console.log('mobile', mobile)
     if(!mobile.length) {
       console.log('please enter mobile')
       return

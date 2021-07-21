@@ -1,10 +1,11 @@
-import {Text, ScrollView, Button, Image, View} from 'react-native';
+import {Text, ScrollView} from 'react-native';
 import React from 'react';
+import PendingTeams from '../../components/pendingTeams';
 
-
-const Home = ({ navigation }) => {
+const Home = () => {
   return (
     <ScrollView style={{ flex: 1 }}>
+      <PendingTeams />
       <Text style={{ fontSize: 18, paddingTop: 10}}>Home</Text>
     </ScrollView>
   );

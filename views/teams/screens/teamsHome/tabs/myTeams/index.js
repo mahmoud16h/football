@@ -1,5 +1,5 @@
 import {Text, ScrollView, Image, View} from 'react-native';
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import Card from '../../../../../../components/card';
 import addOne from '../../../../../../assets/addOne.png'
 import useTeams from '../../../../../../redux/teams/hooks';
@@ -8,31 +8,34 @@ import { useIsFocused } from "@react-navigation/native";
 import theme from '../../../../../theme';
 import LoadingScreen from '../../../../../../components/loadingSpinner';
 import capitalize from '../../../../../../utils/capitalize';
+import axios from 'axios';
 
 const MyTeams = ({ navigation, currentTab }) => {
   const { id } = useAuth();
-  const { teams, isLoading, getTeams } = useTeams({ playerId: id })
+  const { teams, isLoading, getTeams, isLoadingPendingTeams, getPendingTeamRequests, pendingTeamIds } = useTeams(id)
   const isFocused = useIsFocused();
 
   useEffect(() => {
-    isFocused && getTeams()
+    isFocused && Promise.all(
+      [getTeams(id), getPendingTeamRequests(id)]).
+    then()
   }, [isFocused, currentTab])
 
   const hasTeams = !!teams?.length
-
   const renderTeams = () => {
     return teams.map(({name, city, _id}) => (
-        <Card key={_id} onPress={() => navigation.navigate('Team', {teamId: _id})}>
+        <Card key={_id} onPress={() => navigation.navigate('Team', {teamId: _id })}>
           <View style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
             <Text style={{fontSize: 20, fontWeight: 'bold'}}>{capitalize(name)}</Text>
             <Text style={{fontSize: 12, fontWeight: 'bold', color: theme.inactiveGrey, textAlign: 'center'}}>{city}</Text>
+            {pendingTeamIds.includes(_id) && <Text style={{fontSize: 12, fontWeight: 'bold', color: 'red', textAlign: 'center'}}>PENDING</Text>}
           </View>
         </Card>
       )
     )
   }
 
-  if (isLoading) return <LoadingScreen />
+  if (isLoading || isLoadingPendingTeams) return <LoadingScreen />
 
   return (
 

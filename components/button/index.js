@@ -2,9 +2,11 @@ import React from 'react';
 import {TouchableHighlight, Text, View} from 'react-native';
 import theme from '../../views/theme';
 
-const Button = ({ secondary, Icon, disabled, onPress, width, ...props}) => {
+const Button = ({ secondary, Icon, disabled, onPress, width, color, ...props}) => {
   const backgroundColor = () => {
     switch (true){
+      case !!color:
+        return color
       case !!disabled:
         return theme.inactiveGrey
       case !!secondary:

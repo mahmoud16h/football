@@ -6,28 +6,33 @@ import LoadingScreen from '../../../../components/loadingSpinner';
 import theme from '../../../theme';
 import capitalize from '../../../../utils/capitalize';
 import Button from '../../../../components/button';
+import useAuth from '../../../../redux/auth/hooks';
 
 const TeamView = ({ navigation, route }) => {
+  const { id } = useAuth();
   const { teamId } = route.params
   const isFocused = useIsFocused();
 
-  const { team, isLoadingTeam, getTeam } = useTeams({ teamId })
-
+  const { team, isLoadingTeam, getTeam, isLoadingPendingTeams, getPendingTeamRequests, pendingTeamIds } = useTeams({})
   useEffect(() => {
-    isFocused && getTeam()
+    isFocused && Promise.all([getTeam(teamId), getPendingTeamRequests(id)]).then()
   }, [isFocused])
 
+
+  const isPending = pendingTeamIds.includes(teamId)
   if (!isFocused) return null
-  if (isLoadingTeam || !team) return <LoadingScreen />
+  if (isLoadingTeam || !team || isLoadingPendingTeams) return <LoadingScreen />
   return (
     <View style={{ flex: 1, alignItems: 'center'}}>
       <Text style={{ fontSize: 40, color: theme.activeWhite }}>{capitalize(team.name)}</Text>
       <Text style={{ fontSize: 20, color: theme.inactiveGrey }}>{team.city}</Text>
       <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', marginTop: 30}}>
-        <Button width="40%" title="Matches" />
-        <Button width="40%" title="Players" onPress={() => navigation.navigate('Players', { teamId })}/>
-        <Button width="40%" title="Stats" />
-        <Button width="40%" title="Rivals" />
+        {isPending && <Button color="green" width="40%" title="Accept" />}
+        {isPending && <Button color="red" width="40%" title="Reject" />}
+        <Button disabled={isPending} width="40%" title="Matches" />
+        <Button disabled={isPending} width="40%" title="Players" onPress={() => navigation.navigate('Players', { teamId })}/>
+        <Button disabled={isPending} width="40%" title="Stats" />
+        <Button disabled={isPending} width="40%" title="Rivals" />
       </View>
     </View>
   )

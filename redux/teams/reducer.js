@@ -3,7 +3,7 @@ import {ACTIONS} from "./actions";
 const initialState = {
     teams: [],
     team: {},
-    pendingTeamInvites: [],
+    pendingTeamIds: [],
 }
 
 const TeamsReducer = (state = initialState, action) => {
@@ -18,10 +18,12 @@ const TeamsReducer = (state = initialState, action) => {
                 ...state,
                 team: action.payload.team,
             }
-        case ACTIONS.SET_PENDING_TEAM_INVITES:
+        case ACTIONS.SET_PENDING_TEAM_IDS:
+            console.log('actin khara')
+            console.log('action.payload.teams', action.payload.teams)
             return {
                 ...state,
-                pendingTeamInvites: action.payload.teams,
+                pendingTeamIds: action.payload.teams,
             }
         default:
             return state
