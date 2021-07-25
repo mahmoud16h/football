@@ -10,10 +10,9 @@ const TeamAddPlayers = ({ navigation, route }) => {
   const isFocused = useIsFocused();
 
   const { teamId } = route.params
-  const { team, isLoadingTeam, getTeam } = useTeams({ teamId })
-
+  const { team, isLoadingTeam, getTeam } = useTeams()
   useEffect(() => {
-    isFocused && getTeam()
+    isFocused && getTeam(teamId)
   }, [isFocused])
 
 

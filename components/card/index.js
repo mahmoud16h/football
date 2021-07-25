@@ -1,6 +1,6 @@
 import React from 'react';
 import {TouchableHighlight} from 'react-native';
-import theme from '../../views/theme';
+import theme from '../../theme';
 
 const Card = ({ disabled, width, height, ...props}) => (
   <TouchableHighlight

@@ -1,28 +1,21 @@
 import {View, Text} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import DropDown from '../../../../components/dropDown';
-import theme from '../../../theme';
+import theme from '../../../../theme';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Button from '../../../../components/button';
-import useTeams from '../../../../redux/teams/hooks';
-import useAuth from '../../../../redux/auth/hooks';
-import {useIsFocused} from '@react-navigation/native';
-const NewGame = ({ navigation, route }) => {
-  const isFocused = useIsFocused();
+import {useSelector} from 'react-redux';
+import {myTeamsSelector} from '../../../../redux/teams/selectors';
 
+const NewGame = ({ navigation }) => {
   const [myTeam, setMyTeam] = useState('')
   const [myTeamOpen, setMyTeamOpen] = useState(false)
   const [opponent, setOpponent] = useState('')
   const [opponentOpen, setOpponentOpen] = useState(false)
   const [date, setDate] = useState(new Date());
   const [gameType, setGameType] = useState(5)
-  const { id: playerId } = useAuth();
-  const { teams, isLoading, getTeams } = useTeams()
+  const teams = useSelector(myTeamsSelector)
   const myTeamsValues = teams.map(team => ({ label: team.name, value: team._id}))
-
-  useEffect(() => {
-    isFocused && getTeams(playerId)
-  }, [isFocused])
 
   const onChangeDateTime = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -79,7 +72,7 @@ const NewGame = ({ navigation, route }) => {
 
 
       <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', marginTop: 30, marginBottom: 20}}>
-        {[5,6,7,11].map(num => <Button width="40%" secondary={num !== gameType} onPress={() => setGameType(num)} title={`${num}-a-side`}/>)}
+        {[5,6,7,11].map(num => <Button key={num} width="40%" secondary={num !== gameType} onPress={() => setGameType(num)} title={`${num}-a-side`}/>)}
       </View>
       <Button title="Next" disabled={!formComplete} onPress={() => navigation.navigate('Players', { home: myTeam, away: opponent, gameType, date })}/>
     </View>

@@ -1,6 +1,6 @@
 import {ACTIONS} from "./actions";
 
-const initialState = {isLoggedIn: false}
+const initialState = {loggedIn: false}
 console.log('initialize')
 const AuthReducer = (state = initialState, action) => {
     switch (action.type) {
@@ -12,7 +12,7 @@ const AuthReducer = (state = initialState, action) => {
                 lastName: action.payload.lastName,
                 id: action.payload.id,
             }
-        case 'SET_INIT':
+        case ACTIONS.SET_INIT:
             return {
                 loggedIn: true,
                 mobile: action.payload.mobile,

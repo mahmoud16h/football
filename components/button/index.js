@@ -1,6 +1,6 @@
 import React from 'react';
 import {TouchableHighlight, Text, View} from 'react-native';
-import theme from '../../views/theme';
+import theme from '../../theme';
 
 const Button = ({ secondary, Icon, disabled, onPress, width, color, ...props}) => {
   const backgroundColor = () => {

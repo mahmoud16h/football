@@ -1,5 +1,5 @@
 import {Text, View} from 'react-native';
-import theme from '../../views/theme';
+import theme from '../../theme';
 import DropDownPicker from 'react-native-dropdown-picker';
 import React from 'react';
 

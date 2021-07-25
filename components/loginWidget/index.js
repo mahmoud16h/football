@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { StyleSheet, Text, View, TextInput } from 'react-native';
 import useAuth from '../../redux/auth/hooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {LoginSuccessful, setInit} from '../../redux/auth/actions';
+import {LoginSuccessful, logoutAction, setInit} from '../../redux/auth/actions';
 import axios from 'axios';
 import Input from '../input';
 import Button from '../button';
@@ -15,11 +15,23 @@ export default function LoginWidget({navigation}) {
   const { loggedIn } = useAuth()
   const dispatch = useDispatch();
 
+  const checkToken = async () => {
+    try {
+      await axios.get('is-valid-token')
+    } catch (e) {
+      AsyncStorage.multiRemove(['token', 'userId','email'])
+        .then(() => {
+          dispatch(logoutAction())
+        });
+    }
+  }
+
   useEffect(() => {
     AsyncStorage.multiGet(['token', 'userId', 'mobile'])
       .then((result) => {
         if (result[0][1] !== null) {
           axios.defaults.headers['x-access-token'] = result[0][1];
+          checkToken()
           dispatch(setInit({
             id: result[1][1],
             mobile: result[2][1],
@@ -46,11 +58,10 @@ export default function LoginWidget({navigation}) {
         .then(() => {
           dispatch(LoginSuccessful(response.data))
         });
-      console.log('response', response)
 
 
     } catch (e) {
-      console.log({ title: e.response?.data.message || 'Error'})
+      console.log({ title: e || 'Error'})
     }
   }
 

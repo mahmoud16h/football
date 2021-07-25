@@ -21,12 +21,3 @@ export const setTeam = (team) => {
         }
     }
 }
-
-export const setPendingTeamIds = (teams) => {
-    return {
-        type: ACTIONS.SET_PENDING_TEAM_IDS,
-        payload: {
-            teams
-        }
-    }
-}

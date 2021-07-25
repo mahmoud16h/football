@@ -1,5 +1,5 @@
 import {Text, View} from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import { createStackNavigator, TransitionSpecs } from '@react-navigation/stack';
 import NewGame from './screens/newGame';
 import SelectPlayers from './screens/selectPlayers';

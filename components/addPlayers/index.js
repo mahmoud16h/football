@@ -1,50 +1,55 @@
-import {Text, View, ScrollView, Image, ActivityIndicator, KeyboardAvoidingView} from 'react-native';
+import {Text, View, ScrollView, Image} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Input from '../input';
 import {Ionicons} from '@expo/vector-icons';
-import theme from '../../views/theme';
+import theme from '../../theme';
 import addOne from '../../assets/addOne.png';
 import Card from '../card';
-import capitalize from '../../utils/capitalize';
-import axios from 'axios';
 import Button from '../button';
+import {addPlayerContract, deleteContract, fetchContracts} from '../../api/contracts';
 
-const AddPlayers = ({ team = []}) => {
+const AddPlayers = ({ team = {}}) => {
   const [playerName, setPlayerName] = useState('')
   const [playerNumber, setPlayerNumber] = useState('')
   const [players, setPlayers] = useState([])
 
   useEffect(() => {
-    fetchContracts()
+    onFetchContracts()
   }, [])
-  const fetchContracts = async () => {
+
+  const onFetchContracts = async () => {
     try {
-      const response = await axios.get(`contracts/team/${team._id}`)
-      setPlayers(response.data || [])
+      const res = await fetchContracts({teamId: team._id})
+      setPlayers(res.data)
     } catch (e) {
-      console.log('error', e)
+      console.log('Error fetching contracts by team', e)
     }
   }
+
   const addPLayer = async () => {
     const playerNumberExists = players.find(player => player.number === playerNumber)
     const canAddPlayer = !!playerName.length && !!playerNumber.length
     if (!playerNumberExists && canAddPlayer) {
 
       try {
-        const response = await axios.post(`contracts`, {playerName, playerMobile: playerNumber, teamId: team._id })
+        const response = await addPlayerContract({playerName, playerMobile: playerNumber, teamId: team._id })
         const {playerName: name, playerMobile, playerId } = response.data
         setPlayers([...players, { playerName: name, playerMobile, playerId }])
         setPlayerName('')
         setPlayerNumber('')
       } catch (e){
-        console.log('error', e)
+        console.log('Error adding player to team', e)
       }
     }
   }
 
-  const removePlayer = (mobile) => {
-    const newPlayers = players.filter(player => player.mobile !== mobile)
-    setPlayers(newPlayers)
+  const removePlayer = async (playerId) => {
+    try {
+      await deleteContract({playerId, teamId: team._id})
+      await fetchContracts({ teamId: team._id})
+    } catch (e) {
+      console.log('Error removing player from team', e)
+    }
   }
 
   return (
@@ -60,7 +65,7 @@ const AddPlayers = ({ team = []}) => {
       <View style={{ width: 330, height: 1, borderColor: theme.inactiveGrey, borderStyle: 'solid', borderWidth: 1, marginLeft: 6, marginTop: 20, marginBottom: 30}}/>
 
       {!players.length && <Text style={{ color: theme.activeWhite, fontSize: 16, marginLeft: 8, fontWeight: 'bold'}}>You have no players in your team</Text>}
-      {players.map(({ playerName: name, playerMobile: mobile, playerId: id }) =>
+      {players.map(({ playerName: name, playerMobile: mobile, playerId: id, status }) =>
         <View key={mobile} style={{
           display: 'flex',
           backgroundColor: id ? theme.activeWhite : theme.inactiveGrey,
@@ -79,9 +84,10 @@ const AddPlayers = ({ team = []}) => {
             <Text style={{ fontSize: 16, marginLeft: 8, fontWeight: 'bold'}}>{name}</Text>
             <Text style={{ fontSize: 14, marginLeft: 8, fontWeight: 'bold', color: id && theme.inactiveGrey}}>{mobile}</Text>
           </View>
+          {status === 'pending' && <Text style={{ fontSize: 14, marginLeft: 6, fontWeight: 'bold', color: 'red'}}>pending</Text>}
           <View style={{ display: 'flex', flexDirection: 'row'}}>
             {/*{ !id && <ActivityIndicator size="small" /> }*/}
-            <Ionicons name="trash-outline" size={20} onPress={() => removePlayer(mobile)} />
+            <Ionicons name="trash-outline" size={20} onPress={() => removePlayer(id)} />
           </View>
         </View>
       )}

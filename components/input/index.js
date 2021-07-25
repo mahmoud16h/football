@@ -1,6 +1,6 @@
 import React from 'react';
 import {TextInput, View, Text} from 'react-native';
-import theme from '../../views/theme';
+import theme from '../../theme';
 
 const Input = ({fontSize, ...props}) => (
   <View style={{ margin: 8}}>

@@ -1,12 +1,13 @@
 import {Text, ScrollView, View, ActivityIndicator} from 'react-native';
 import React, { useState} from 'react';
 import Card from '../../../../../../components/card';
-import theme from '../../../../../theme';
+import theme from '../../../../../../theme';
 import LoadingScreen from '../../../../../../components/loadingSpinner';
 import capitalize from '../../../../../../utils/capitalize';
 import Input from '../../../../../../components/input';
 import {Ionicons} from '@expo/vector-icons';
 import axios from 'axios';
+import {searchTeamsApi} from '../../../../../../api/teams';
 
 const Search = ({ navigation }) => {
   const [teams, setTeams] = useState([])
@@ -17,12 +18,11 @@ const Search = ({ navigation }) => {
     setSearchValue(value)
     if (!value) return setTeams([]);
     setIsSearching(true)
-    const url = `teams/search/${value.toLowerCase()}`
     try {
-      const response = await axios.get(url)
-      setTeams(response.data)
+      const res = await searchTeamsApi(value.toLowerCase())
+      setTeams(res.data)
     } catch (e) {
-      console.log(e.response?.data.message, 'error')
+      console.log('Error searching teams', e)
     }
     setIsSearching(false)
   }

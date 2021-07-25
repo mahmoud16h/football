@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Button, Image, View } from 'react-native';
 import * as ExpoImagePicker from 'expo-image-picker';
 import {Ionicons} from '@expo/vector-icons';
-import theme from '../../views/theme';
+import theme from '../../theme';
 
 const ImagePicker = ({ image, setImage }) => {
 

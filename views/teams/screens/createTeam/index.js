@@ -5,11 +5,12 @@ import {Ionicons} from '@expo/vector-icons';
 import Input from '../../../../components/input';
 import DropDownPicker from 'react-native-dropdown-picker';
 
-import theme from '../../../../views/theme';
+import theme from '../../../../theme';
 import Button from '../../../../components/button';
 import ImagePicker from '../../../../components/imagePicker';
 import useAuth from '../../../../redux/auth/hooks';
 import DropDown from '../../../../components/dropDown';
+import {createTeamApi} from '../../../../api/teams';
 
 const CreateTeam = ({ navigation }) => {
   const [image, setImage] = useState(null);
@@ -27,11 +28,12 @@ const CreateTeam = ({ navigation }) => {
       city,
     }
     try {
-      const response = await axios.post('teams', payload)
-      setTeamCreated(response.data)
+      const res = await createTeamApi(payload)
+      setTeamCreated(res.data)
     } catch (e) {
       console.log('Error creating team', e)
     }
+
   }
 
   const canSubmit = teamName && city
@@ -49,7 +51,7 @@ const CreateTeam = ({ navigation }) => {
         setValue={setCity}
       />
       {!teamCreated && <Button disabled={!canSubmit} title="Create team" onPress={createTeam}/>}
-      {teamCreated && <Button secondary title="Add players manually" onPress={() => navigation.navigate('Players', { teamId: teamCreated })}/>}
+      {teamCreated && <Button secondary title="Add players manually" onPress={() => navigation.navigate('Players', { teamId: teamCreated._id })}/>}
       {teamCreated && <Button Icon={() => <Ionicons name="share" size={20} />} title="Share with players" onPress={() => setTeamCreated(true)}/>}
     </ScrollView>
   );

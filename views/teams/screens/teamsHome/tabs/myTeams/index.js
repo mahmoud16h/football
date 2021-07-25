@@ -1,25 +1,16 @@
 import {Text, ScrollView, Image, View} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import Card from '../../../../../../components/card';
 import addOne from '../../../../../../assets/addOne.png'
-import useTeams from '../../../../../../redux/teams/hooks';
-import useAuth from '../../../../../../redux/auth/hooks';
-import { useIsFocused } from "@react-navigation/native";
-import theme from '../../../../../theme';
-import LoadingScreen from '../../../../../../components/loadingSpinner';
+import theme from '../../../../../../theme';
 import capitalize from '../../../../../../utils/capitalize';
-import axios from 'axios';
+import {useSelector} from 'react-redux';
+import {pendingTeamContractsSelector} from '../../../../../../redux/contracts/selectors';
+import {myTeamsSelector} from '../../../../../../redux/teams/selectors';
 
 const MyTeams = ({ navigation, currentTab }) => {
-  const { id } = useAuth();
-  const { teams, isLoading, getTeams, isLoadingPendingTeams, getPendingTeamRequests, pendingTeamIds } = useTeams(id)
-  const isFocused = useIsFocused();
-
-  useEffect(() => {
-    isFocused && Promise.all(
-      [getTeams(id), getPendingTeamRequests(id)]).
-    then()
-  }, [isFocused, currentTab])
+  const pendingTeamIds = useSelector(pendingTeamContractsSelector)
+  const teams = useSelector(myTeamsSelector)
 
   const hasTeams = !!teams?.length
   const renderTeams = () => {
@@ -34,8 +25,6 @@ const MyTeams = ({ navigation, currentTab }) => {
       )
     )
   }
-
-  if (isLoading || isLoadingPendingTeams) return <LoadingScreen />
 
   return (
 

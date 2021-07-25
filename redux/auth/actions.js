@@ -2,6 +2,7 @@ import axios from 'axios';
 export const ACTIONS = {
     LOG_IN_SUCCESS: 'AUTH/LOG_IN_SUCCESS',
     LOG_OUT: 'AUTH/LOG_OUT',
+    SET_INIT: 'AUTH/SET_INIT',
 }
 
 export const LoginSuccessful = (data) => {
@@ -21,7 +22,7 @@ export const LoginSuccessful = (data) => {
 }
 
 export const setInit = (payload) => ({
-      type: 'SET_INIT',
+      type: ACTIONS.SET_INIT,
       payload
   }
 )
