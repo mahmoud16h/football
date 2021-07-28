@@ -1,6 +1,7 @@
 const theme = {
-  activeWhite: '#D8D8D8',
-  inactiveGrey: '#565656',
+  activeWhite: 'whitesmoke',
+  inactiveGrey: '#caa855',
+  accent: '#fffa6b',
 }
 
 export default theme

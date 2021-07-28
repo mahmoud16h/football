@@ -1,5 +1,5 @@
-import {Text, ScrollView, Image, View} from 'react-native';
-import React from 'react';
+import {Text, ScrollView, Image, View, Animated} from 'react-native';
+import React, {useEffect, useRef, useState} from 'react';
 import Card from '../../../../../../components/card';
 import addOne from '../../../../../../assets/addOne.png'
 import theme from '../../../../../../theme';
@@ -7,8 +7,11 @@ import capitalize from '../../../../../../utils/capitalize';
 import {useSelector} from 'react-redux';
 import {pendingTeamContractsSelector} from '../../../../../../redux/contracts/selectors';
 import {myTeamsSelector} from '../../../../../../redux/teams/selectors';
+import {Ionicons} from '@expo/vector-icons';
+import {useIsFocused} from '@react-navigation/native';
+import CreateJoinTeam from '../../../../../../components/createJoinTeam';
 
-const MyTeams = ({ navigation, currentTab }) => {
+const MyTeams = ({ navigation }) => {
   const pendingTeamIds = useSelector(pendingTeamContractsSelector)
   const teams = useSelector(myTeamsSelector)
 
@@ -27,27 +30,15 @@ const MyTeams = ({ navigation, currentTab }) => {
   }
 
   return (
-
-    <ScrollView contentContainerStyle={{ display: 'flex', justifyContent: 'space-between' }}>
-      {hasTeams &&
-      <View style={{display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center'}}>
-        {renderTeams()}
-      </View>}
-      <View style={{ backgroundColor: 'transparent', justifyContent: 'space-evenly', display: 'flex', flexDirection: 'row', width: '100%', paddingTop: 20 }}>
-        <Card width={hasTeams && 70} height={hasTeams && 70} onPress={() => navigation.navigate('Create team')}>
-          <View style={{ justifyContent: 'center', alignItems: 'center', display: 'flex', width: '100%'}}>
-            <Image style={{ width: hasTeams ? 30: 77, height: hasTeams ? 32 : 80}} source={addOne} />
-            <Text style={{ fontSize: hasTeams ? 10 : 18, paddingTop: 10}}>Create Team</Text>
-          </View>
-        </Card>
-        <Card width={hasTeams && 70} height={hasTeams && 70} onPress={() => navigation.navigate('Join team')}>
-          <View style={{ justifyContent: 'center', alignItems: 'center', display: 'flex', width: '100%'}}>
-            <Image style={{ width: hasTeams ? 30: 77, height: hasTeams ? 32 : 80}} source={addOne} />
-            <Text style={{ fontSize: hasTeams ? 10 : 18, paddingTop: 10}}>Join Team</Text>
-          </View>
-        </Card>
-      </View>
-    </ScrollView>
+    <View style={{ display: 'flex', flex: 1 }}>
+      <ScrollView contentContainerStyle={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', }}>
+        {hasTeams &&
+        <View style={{display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center'}}>
+          {renderTeams()}
+        </View>}
+      </ScrollView>
+      <CreateJoinTeam navigation={navigation} />
+    </View>
   );
 }
 

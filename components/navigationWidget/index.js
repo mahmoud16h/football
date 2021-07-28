@@ -8,6 +8,7 @@ import Tournaments from '../../views/tournaments';
 import Teams from '../../views/teams';
 import Profile from '../../views/profile';
 import Play from '../../views/play';
+import theme from '../../theme';
 
 const Tab = createBottomTabNavigator();
 const MyTheme = {
@@ -20,11 +21,13 @@ const MyTheme = {
 const MyTabs = () => (
   <Tab.Navigator
     tabBarOptions={{
-      activeTintColor: '#D8D8D8',
-      inactiveTintColor: '#565656',
+      activeTintColor: theme.activeWhite,
+      inactiveTintColor: theme.inactiveGrey,
       labelPosition: 'below-icon',
       style: {
         backgroundColor: 'transparent',
+        borderTopColor: theme.activeWhite,
+
       }
     }}
 

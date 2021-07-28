@@ -10,8 +10,8 @@ const useAuth = () => {
     const { getTeams } = useTeams()
 
     const fetchInitialData = async () => {
+        setLoadingInitial(true)
         try {
-            setLoadingInitial(true)
             await Promise.all([
                 getTeams(id),
                 getCompleteContractsRequests(id),
