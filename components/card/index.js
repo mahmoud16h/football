@@ -2,7 +2,7 @@ import React from 'react';
 import {TouchableHighlight} from 'react-native';
 import theme from '../../theme';
 
-const Card = ({ disabled, width, height, color, ...props}) => {
+const Card = ({ disabled, width, height, color, isFocused,...props}) => {
   const backgroundColor = () => {
     switch (true){
       case !!color:
@@ -18,6 +18,9 @@ const Card = ({ disabled, width, height, color, ...props}) => {
   <TouchableHighlight
     underlayColor={theme.inactiveGrey}
     style={{
+      borderStyle: 'solid',
+      borderWidth: isFocused ? 6: 0,
+      borderColor: theme.inactiveGrey,
       backgroundColor: backgroundColor(),
       width: width || 140,
       height: height || 140,

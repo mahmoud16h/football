@@ -11,6 +11,7 @@ const CreateJoinTeam = ({ navigation }) => {
   const [showOptions, setShowOptions] = useState(false)
 
   const slideAnim = useRef(new Animated.Value(-90)).current
+  const iconAnim = useRef(new Animated.Value(0)).current
 
   useEffect(() => {
     !isFocused && closeAdd()
@@ -20,25 +21,46 @@ const CreateJoinTeam = ({ navigation }) => {
     toValue: 12,
     duration: 300,
     useNativeDriver: false,
-  }).start()
+  })
 
   const slideOut = () => Animated.timing(slideAnim, {
     toValue: -90,
     duration: 300,
     useNativeDriver: false,
-  }).start()
+  })
+
+  const rotateIcon = () => Animated.timing(iconAnim, {
+    toValue: 1,
+    duration: 300,
+    useNativeDriver: true,
+  })
+
+  const rotateBack = () => Animated.timing(iconAnim, {
+    toValue: 0,
+    duration: 300,
+    useNativeDriver: true,
+  })
 
   const onClickAdd = () => {
     if (showOptions) return closeAdd()
     setShowOptions(true);
-    slideIn()
+    animate()
 
   }
 
   const closeAdd = () => {
     setShowOptions(false);
-    slideOut()
+    Animated.parallel([rotateBack(), slideOut()]).start()
   }
+
+  const animate = () => {
+    Animated.parallel([rotateIcon(), slideIn()]).start()
+  }
+
+  const spin = iconAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['1deg', '45deg']
+  })
 
   return (
     <View>
@@ -67,13 +89,16 @@ const CreateJoinTeam = ({ navigation }) => {
           </View>
         </Card>
       </Animated.View>
-      <Ionicons
-        style={{ position: 'absolute', bottom: 8, right: 8 }}
-        onPress={onClickAdd}
-        color={theme.accent}
-        name={showOptions ? 'close-circle' :"add-circle"}
-        size={40}
-      />
+      <Animated.View
+        style={{ position: 'absolute', bottom: 8, right: 8, transform: [{ rotate: spin }] }}
+      >
+        <Ionicons
+          onPress={onClickAdd}
+          color={theme.accent}
+          name={"add-circle"}
+          size={40}
+        />
+      </Animated.View>
     </View>
   );
 }

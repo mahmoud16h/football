@@ -19,7 +19,7 @@ const TeamAddPlayers = ({ navigation, route }) => {
   if (isLoadingTeam) return <LoadingScreen />
   return (
     <View keyboardShouldPersistTaps='handled' style={{ flex: 1, alignItems: 'center', marginBottom: 20 }}>
-      <AddPlayers team={team} isLoadingTeam/>
+      <AddPlayers navigation={navigation} team={team} isLoadingTeam/>
     </View>
   );
 }

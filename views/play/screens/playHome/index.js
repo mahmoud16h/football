@@ -8,6 +8,7 @@ import {completeTeamContractsSelector} from '../../../../redux/contracts/selecto
 import {getPlayerMatches} from '../../../../api/matches';
 import MatchCard from '../../../../components/matchCard';
 import LoadingCard from '../../../../components/loadingCard';
+import moment from 'moment';
 
 const PlayHome = ({ navigation }) => {
   const isFocused = useIsFocused();
@@ -33,6 +34,12 @@ const PlayHome = ({ navigation }) => {
     isRefresh ? setRefreshing(false) : setIsLoading(false);
   }
 
+  const onClickMatch = (match) => {
+    const isInPast = moment(match.time).isBefore(Date.now())
+    navigation.navigate(isInPast ? 'Review' : 'Match', { match: match})
+  }
+
+  const dateSort = (a,b) => a.time > b.time ? 1 : -1;
 
   return (
     <ScrollView
@@ -42,7 +49,7 @@ const PlayHome = ({ navigation }) => {
     >
       {(isLoading || refreshing) && !matches.length && [1,2,3,4,5,6,7].map((key) => <LoadingCard key={key} />)}
       {!matches.length && !isLoading && <Text style={{ color: theme.activeWhite, fontSize: 18, marginBottom: 20}}>Looks like you have no games, create one below!</Text>}
-      {!!matches.length && matches.map(match => <MatchCard key={match._id} match={match} onPress={() => navigation.navigate('Match', { match: match})} /> )}
+      {!!matches.length && matches.sort(dateSort).map(match => <MatchCard key={match._id} match={match} onPress={() => onClickMatch(match)} /> )}
       <Button secondary title="Create new game" onPress={() => navigation.navigate('New game')} />
     </ScrollView>
   );

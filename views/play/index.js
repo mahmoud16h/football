@@ -5,6 +5,7 @@ import NewGame from './screens/newGame';
 import SelectPlayers from './screens/selectPlayers';
 import PlayHome from './screens/playHome';
 import MatchView from './screens/matchView';
+import ReviewMatch from './screens/reviewMatch';
 const Stack = createStackNavigator();
 
 const TransitionScreen = {
@@ -61,6 +62,7 @@ const MyStack = () => {
       <Stack.Screen name="New game" component={NewGame}/>
       <Stack.Screen name="Players" component={SelectPlayers}/>
       <Stack.Screen name="Match" component={MatchView}/>
+      <Stack.Screen name="Review" component={ReviewMatch}/>
     </Stack.Navigator>
   );
 }

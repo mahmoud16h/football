@@ -3,6 +3,7 @@ import axios from 'axios';
 export const acceptContract = ({teamId, playerId}) => axios.get(`contracts/accept/${teamId}/${playerId}`)
 
 export const deleteContract = ({teamId, playerId}) => axios.delete(`contracts/reject/${teamId}/${playerId}`)
+export const deleteContractByMobile = ({teamId, playerMobile}) => axios.delete(`contracts/reject-mobile/${teamId}/${playerMobile}`)
 
 export const getPendingContracts = ({playerId}) => axios.get(`contracts/player/${playerId}?status=pending`)
 
