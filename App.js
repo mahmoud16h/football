@@ -8,8 +8,9 @@ import { LinearGradient } from 'expo-linear-gradient';
 import NavigationWidget from './components/navigationWidget';
 import Auth from './views/auth'
 
-// axios.defaults.baseURL = 'http://192.168.1.216:8080/'; //home
-axios.defaults.baseURL = 'http://localhost:8080/';
+axios.defaults.baseURL = 'http://192.168.1.216:8080/'; //home
+// axios.defaults.baseURL = 'http://192.168.1.216:8080/'; //mary parents
+// axios.defaults.baseURL = 'http://localhost:8080/';
 
 const Main = () =>  {
   const { loggedIn, id, fetchInitialData } = useAuth()
