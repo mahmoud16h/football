@@ -12,7 +12,7 @@ import useAuth from '../../../../redux/auth/hooks';
 
 const MatchView = ({ navigation, route }) => {
   const { id } = useAuth()
-  const { match: { homeId, awayId, type, time, _id }} = route.params
+  const { match: { homeId, awayId, type, time, _id, status }} = route.params
   const [isLoading, setIsLoading] = useState(false)
   const [awayTeam, setAwayTeam] = useState({})
   const [homeTeam, setHomeTeam] = useState({})
@@ -90,7 +90,7 @@ const MatchView = ({ navigation, route }) => {
     if (selectedAwayTeam.length < type) setSelectedAwayTeam([...selectedAwayTeam, player])
   }
 
-  const filterStarters = (contract) => teamView === 'away' ? contract.teamId === awayId : contract.teamId === homeId
+  const filterStarters = (contract) => contract.status !== 'pending' && teamView === 'away' ? contract.teamId === awayId : contract.teamId === homeId
 
 
   const renderPlayers = () => currentContracts.filter(filterStarters).map(({ playerId, playerName }) =>
@@ -98,7 +98,7 @@ const MatchView = ({ navigation, route }) => {
       key={playerId}
       width="40%"
       title={capitalize(playerName)}
-      // disabled={teamView === 'home' && canUpdate ? selectedAwayTeam.includes(playerId) : selectedHomeTeam.includes(playerId)}
+      disabled={teamView === 'home' && canUpdate ? selectedAwayTeam.includes(playerId) : selectedHomeTeam.includes(playerId)}
       secondary={teamView === 'home' ? !selectedHomeTeam.includes(playerId) : !selectedAwayTeam.includes(playerId)}
       onPress={() => {
         if (teamView === 'home') {
@@ -138,6 +138,24 @@ const MatchView = ({ navigation, route }) => {
     setIsLoading(false)
   }
 
+  const accept = async () => {
+    try {
+      await axios.get(`matches/accept/${_id}`)
+      await fetchData()
+    } catch (e) {
+      console.log('error accepting match', e)
+    }
+  }
+
+  const reject = async () => {
+    try {
+      await axios.get(`matches/reject/${_id}`)
+      navigation.goBack()
+    } catch (e) {
+      console.log('error accepting match', e)
+    }
+  }
+
   if (isLoading) return <LoadingScreen />
 
   return (
@@ -163,6 +181,8 @@ const MatchView = ({ navigation, route }) => {
           </View>
         </Card>
       </View>
+      {status === 'pending' && <Button onPress={accept} color="green" width="40%" title="Accept" />}
+      {status === 'pending' && <Button onPress={reject} color="red" width="40%" title="Reject" />}
       <Text style={{ color: theme.activeWhite, fontSize: 18, fontWeight: 'bold'}}>{`${type}-a-side`}</Text>
       <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', marginTop: 10, marginBottom: 20}}>
         {renderPlayers()}

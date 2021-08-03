@@ -49,7 +49,7 @@ const PlayHome = ({ navigation }) => {
     >
       {(isLoading || refreshing) && !matches.length && [1,2,3,4,5,6,7].map((key) => <LoadingCard key={key} />)}
       {!matches.length && !isLoading && <Text style={{ color: theme.activeWhite, fontSize: 18, marginBottom: 20}}>Looks like you have no games, create one below!</Text>}
-      {!!matches.length && matches.sort(dateSort).map(match => <MatchCard key={match._id} match={match} onPress={() => onClickMatch(match)} /> )}
+      {!!matches.length && matches.sort(dateSort).filter(mat => mat.status !== 'rejected').map(match => <MatchCard key={match._id} match={match} onPress={() => onClickMatch(match)} /> )}
       <Button secondary title="Create new game" onPress={() => navigation.navigate('New game')} />
     </ScrollView>
   );
