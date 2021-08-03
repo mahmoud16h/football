@@ -4,7 +4,7 @@ import Button from '../../../../components/button';
 import DropDown from '../../../../components/dropDown';
 
 
-const tournamentPreview = ({ navigation, route }) => {
+const TournamentPreview = ({ navigation, route }) => {
   const [myTeamOpen, setMyTeamOpen] = useState(false)
   const [showTeams, setShowTeams] = useState(false)
   const [selectedTeam, setSelectedTeam] = useState({})
@@ -41,4 +41,4 @@ const tournamentPreview = ({ navigation, route }) => {
   );
 }
 
-export default tournamentPreview
+export default TournamentPreview

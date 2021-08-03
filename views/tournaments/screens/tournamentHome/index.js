@@ -30,7 +30,7 @@ const TournamentHome = ({ navigation }) => {
 
   return (
     <View style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-      {tournaments.map(tournament => <TournamentCard teams={teams} tournament={tournament} tournamentTickets={tournamentTickets} navigation={navigation} />)}
+      {tournaments.map(tournament => <TournamentCard key={tournament._id} teams={teams} tournament={tournament} tournamentTickets={tournamentTickets} navigation={navigation} />)}
     </View>
   );
 }

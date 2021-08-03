@@ -14,7 +14,6 @@ const AddPlayers = ({ team = {}, navigation}) => {
   const [playerNumber, setPlayerNumber] = useState('')
   const [players, setPlayers] = useState([])
   const [isLoading, setIsLoading] = useState(false)
-  console.log('players', players)
   useEffect(() => {
     onFetchContracts()
   }, [])

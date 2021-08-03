@@ -4,7 +4,7 @@ import {Ionicons} from '@expo/vector-icons';
 
 const LoadingScreen = () => {
   const fadeAnim = useRef(new Animated.Value(0)).current
-  const moveAnim = useRef(new Animated.Value(25)).current
+  const moveAnim = useRef(new Animated.Value(0)).current
   useEffect(() => {
     Animated.loop(
       Animated.parallel([

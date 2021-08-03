@@ -3,7 +3,7 @@ import theme from '../../theme';
 import DropDownPicker from 'react-native-dropdown-picker';
 import React from 'react';
 
-const DropDown = ({ disabled = false, value, items, setOpen, setValue, label, open }) => (
+const DropDown = ({ disabled = false, value, items, setOpen, setValue, label, open, ...props }) => (
   <View style={{ display: 'flex', flexDirection: 'column', marginTop: 8, marginBottom: 20}}>
   <Text style={{ color: theme.activeWhite, fontSize: 16, marginLeft: 8}}>{label}</Text>
   <DropDownPicker
@@ -21,6 +21,7 @@ const DropDown = ({ disabled = false, value, items, setOpen, setValue, label, op
     setValue={setValue}
     searchable={true}
     searchPlaceholder="Search..."
+    {...props}
   />
 </View>)
 

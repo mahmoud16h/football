@@ -6,16 +6,20 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import Button from '../../../../components/button';
 import {useSelector} from 'react-redux';
 import {myTeamsSelector} from '../../../../redux/teams/selectors';
+import {searchTeamsApi} from '../../../../api/teams';
 
 const NewGame = ({ navigation }) => {
   const [myTeam, setMyTeam] = useState('')
   const [myTeamOpen, setMyTeamOpen] = useState(false)
   const [opponent, setOpponent] = useState('')
+  const [opponents, setOpponents] = useState([])
   const [opponentOpen, setOpponentOpen] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const [date, setDate] = useState(new Date());
   const [gameType, setGameType] = useState(5)
   const teams = useSelector(myTeamsSelector)
   const myTeamsValues = teams.map(team => ({ label: team.name, value: team._id}))
+  const opponentsValues = opponents.map(team => ({ label: team.name, value: team._id}))
 
   const onChangeDateTime = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -23,6 +27,20 @@ const NewGame = ({ navigation }) => {
   };
 
   const formComplete = myTeam &&opponent && gameType && date
+
+  const searchTeams = async (text) => {
+    if (!text) return setOpponents([])
+    console.log('text', text)
+    setIsLoading(true)
+    try {
+      const res = await searchTeamsApi(text.toLowerCase())
+      setOpponents(res.data)
+      console.log('res.da', res.data)
+    } catch (e) {
+      console.log('Error searching teams', e)
+    }
+    setIsLoading(false)
+  }
 
   return (
     <View keyboardShouldPersistTaps='handled' style={{ flex: 1, alignItems: 'center', marginBottom: 20 }}>
@@ -45,8 +63,10 @@ const NewGame = ({ navigation }) => {
         setOpen={setOpponentOpen}
         value={opponent}
         setValue={setOpponent}
-        // replace with opponent teams later
-        items={myTeamsValues}
+        loading={isLoading}
+        items={opponentsValues}
+        disableLocalSearch={true}
+        onChangeSearchText={searchTeams}
       />
 
         <View style={{ width: 130, marginBottom: 4 }}>

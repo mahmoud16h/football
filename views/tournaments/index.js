@@ -3,6 +3,7 @@ import React from 'react';
 import { createStackNavigator, TransitionSpecs } from '@react-navigation/stack';
 import TournamentHome from './screens/tournamentHome';
 import TournamentPreview from './screens/tournamentPreview';
+import TournamentDay from './screens/tournamentDay';
 const Stack = createStackNavigator();
 
 const TransitionScreen = {
@@ -57,6 +58,7 @@ const MyStack = () => {
     <Stack.Navigator screenOptions={CardOptions}>
       <Stack.Screen name="Tournaments" options={{headerShown: false}} component={TournamentHome} />
       <Stack.Screen name="Tournament" component={TournamentPreview}/>
+      <Stack.Screen name="Tournament day" options={{headerShown: false}} component={TournamentDay}/>
     </Stack.Navigator>
   );
 }
